@@ -1,0 +1,12 @@
+{
+  "name": "Flxr",
+  "version": "1.0.0",
+  "description": "Simple, free, draggable solution with throw-a-bility",
+  "main": "app.js",
+  "author": "Samuel Smolenski",
+  "license": "ISC",
+  "devDependencies": {
+    "properjs-controller": "^0.2.0"
+  },
+  "dependencies": {}
+}
