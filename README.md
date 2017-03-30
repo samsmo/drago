@@ -28,3 +28,9 @@ const defaultOpts = {
     // ...etc
   } )
 ```
+
+### Et tu, brute?
+
+```
+  instance.kill();
+```

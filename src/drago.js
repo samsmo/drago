@@ -157,6 +157,15 @@ export default class Drago {
    }
 
    this.checkBounds();
-   window.requestAnimationFrame(this._loop);
+   this._animation_id = window.requestAnimationFrame(this._loop);
+ }
+
+ kill() {
+   this._el.removeEventListener('mousedown', this._startDrag);
+   this._el.removeEventListener('mouseup', this._stopDrag);
+   this._container.removeEventListener('mouseout', this._killDrag);
+   this._container.removeEventListener('mousemove', this._handleDrag);
+
+   window.cancelAnimationFrame(this._animation_id);
  }
 }
