@@ -1,4 +1,4 @@
-import Drago from '../../drago';
+import Drago from '../../src/drago';
 import '../styles/main.less';
 
 const $container = document.querySelector('.js-drag-container');

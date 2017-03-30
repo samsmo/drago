@@ -1,6 +1,8 @@
+var webpack = require('webpack');
+
 module.exports = {
     cache: false,
-    entry: './drago.js',
+    entry: './src/drago.js',
     output: {
         filename: 'index.js',
         path: __dirname,
@@ -29,4 +31,17 @@ module.exports = {
         extensions: ['', '.js', '.jsx']
     },
     target: 'web',
+    plugins: [
+      new webpack.optimize.UglifyJsPlugin({
+          beautify: false,
+          mangle: {
+              screw_ie8: true,
+              keep_fnames: true
+          },
+          compress: {
+              screw_ie8: true
+          },
+          comments: false
+      })
+    ]
 };
