@@ -30,6 +30,7 @@ const defaultOpts = {
 ```
 
 ### Et tu, brute?
+To stop the RAF / Draggability of drago:
 
 ```
   instance.kill();
