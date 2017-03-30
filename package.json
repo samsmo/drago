@@ -1,12 +1,22 @@
 {
-  "name": "Flxr",
+  "name": "drago",
   "version": "1.0.0",
   "description": "Simple, free, draggable solution with throw-a-bility",
-  "main": "app.js",
+  "main": "index.js",
   "author": "Samuel Smolenski",
   "license": "ISC",
   "devDependencies": {
-    "properjs-controller": "^0.2.0"
+    "core-decorators": "^0.15.0",
+    "properjs-controller": "^0.2.0",
+    "babel": "^6.23.0",
+    "babel-core": "^6.24.0",
+    "babel-eslint": "^7.2.1",
+    "babel-loader": "^6.4.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-types": "^6.23.0",
+    "webpack": "^1.9.11"
   },
   "dependencies": {}
 }

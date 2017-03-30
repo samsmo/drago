@@ -1,3 +1,5 @@
 node_modules
-
+bin
 test/node_modules
+index.js
+npm-debug.log

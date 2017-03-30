@@ -1,5 +1,5 @@
 {
-  "name": "flxrTest",
+  "name": "dragoTest",
   "version": "1.0.0",
   "description": "Simple, free, draggable solution with throw-a-bility",
   "main": "app.js",
@@ -9,18 +9,24 @@
   },
   "author": "",
   "license": "ISC",
+  "standard": {
+    "parser": "babel-eslint"
+  },
   "devDependencies": {
-    "babel-core": "^5.5.8",
-    "babel-loader": "^5.1.4",
+    "babel": "^6.23.0",
+    "babel-core": "^6.24.0",
+    "babel-eslint": "^7.2.1",
+    "babel-loader": "^6.4.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-types": "^6.23.0",
     "css-loader": "^0.15.6",
-    "flxr": "../",
+    "drago": "../",
     "less": "^2.7.2",
     "less-loader": "^2.2.3",
     "style-loader": "^0.12.3",
     "webpack": "^1.9.11",
     "webpack-dev-server": "^1.9.0"
-  },
-  "dependencies": {
-    "lodash": "^3.10.1"
   }
 }

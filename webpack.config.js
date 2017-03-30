@@ -1,9 +1,10 @@
 module.exports = {
     cache: false,
-    entry: './libs/main',
+    entry: './drago.js',
     output: {
-        filename: 'bundle.js',
+        filename: 'index.js',
         path: __dirname,
+        libraryTarget: 'umd',
     },
     module: {
         loaders: [{
@@ -26,5 +27,6 @@ module.exports = {
     resolve: {
         modulesDirectories: ['node_modules', 'lib'],
         extensions: ['', '.js', '.jsx']
-    }
+    },
+    target: 'web',
 };
