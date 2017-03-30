@@ -7,7 +7,6 @@
   "license": "ISC",
   "devDependencies": {
     "core-decorators": "^0.15.0",
-    "properjs-controller": "^0.2.0",
     "babel": "^6.23.0",
     "babel-core": "^6.24.0",
     "babel-eslint": "^7.2.1",
