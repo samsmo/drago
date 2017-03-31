@@ -1,6 +1,6 @@
 {
   "name": "drago",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Simple, free, draggable solution with throw-a-bility",
   "main": "index.js",
   "author": "Samuel Smolenski",
