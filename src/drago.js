@@ -14,7 +14,6 @@ const defaultOpts = {
   vMin: { x: -80, y: -80 },
   drag: { x: 0.95, y: 0.85 },
   axis: { x: true, y: true },
-  bounds: { x: true, y: true },
   restrict: { x: 'opposite', y: 'contain' },
 };
 
@@ -138,7 +137,7 @@ bound(coord, boundMax, boundMin) {
    const height = this._el_rect.height;
    let test;
 
-   if (this._opts.axis.x && this._opts.bounds.x) {
+   if (this._opts.axis.x && this._opts.restrict.x !== 'none') {
      if (this._opts.restrict === 'contain') {
        const rightBound = this._container_rect.width - width;
        const leftBound = this._container_rect.left;
@@ -157,7 +156,7 @@ bound(coord, boundMax, boundMin) {
      }
    }
 
-   if (this._opts.axis.y && this._opts.bounds.y) {
+   if (this._opts.axis.y && this._opts.restrict.x !== 'none') {
      if (this._opts.restrict === 'contain') {
        const top = this._container_rect.top;
        const bottom = this._container_rect.height - height;

@@ -9,13 +9,18 @@ Simple, free, draggable solution with throw-a-bility
 These are the default options `drago` comes configured with (you can override these).
 ```
 const defaultOpts = {
-  accel: { x: -0.001, y: -0.01 },
-  vMax: { x: 80, y: 80 },
-  vMin: { x: -80, y: -80 },
-  drag: { x: 0.95, y: 0.85 },
-  axis: { x: true, y: true },
+  accel: { x: -0.001, y: -0.001 }, // acceleration
+  vMax: { x: 80, y: 80 }, // maximum velocity values (for positive throws)
+  vMin: { x: -80, y: -80 }, // minimum velocity values (for negative throws)
+  drag: { x: 0.95, y: 0.85 }, // mess with these to get smoother / rougher throws
+  axis: { x: true, y: true }, // Toggle these to lock draggability to one axis
+  restrict: { x: 'opposite', y: 'contain' }, // type of container restriction
 };
 ```
+Types of restrict:
+`opposite` // Currently lets you throw so that only 25% is viewable at the min , max.
+`contain` // Keep the draggable item inside container
+`none` // Let it be free. Probably not useful
 
 ### How to initialize.
 
