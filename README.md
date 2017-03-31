@@ -1,10 +1,6 @@
 # drago
 Simple, free, draggable solution with throw-a-bility
 
-# TO RUN
-
-`npm i && npm start`
-
 ## Options
 These are the default options `drago` comes configured with (you can override these).
 ```
