@@ -14,6 +14,8 @@ const defaultOpts = {
   vMin: { x: -80, y: -80 },
   drag: { x: 0.95, y: 0.85 },
   axis: { x: true, y: true },
+  bounds: { x: true, y: true },
+  restrict: { x: 'opposite', y: 'contain' },
 };
 
 const defaults = {
@@ -51,7 +53,11 @@ export default class Drago {
   }
 
   _init() {
-    window.requestAnimationFrame(this._loop);
+    setTimeout(() => {
+      this._el_rect = this._el.getBoundingClientRect();
+      this._container_rect = this._container.getBoundingClientRect();
+    }, 0);
+    this._loop();
   }
 
   _setDefaults() {
@@ -61,8 +67,11 @@ export default class Drago {
   _bindEvents() {
    this._el.addEventListener('mousedown', this._startDrag);
    this._el.addEventListener('mouseup', this._stopDrag);
+   this._el.addEventListener('touchstart', this._startDrag);
+   this._el.addEventListener('touchend', this._stopDrag);
    this._container.addEventListener('mouseout', this._killDrag);
    this._container.addEventListener('mousemove', this._handleDrag);
+   this._container.addEventListener('touchmove', this._handleDrag);
  }
 
  @autobind
@@ -75,7 +84,8 @@ export default class Drago {
  @autobind
  _handleDrag(e) {
    if (this._isMoving) {
-     const { clientX, clientY } = e;
+     const clientX = e.clientX ? e.clientX : e.changedTouches[0].clientX;
+     const clientY = e.clientY ? e.clientY : e.changedTouches[0].clientY;
      if (!this._startPos) {
        const rect = this._el.getBoundingClientRect();
        const x = clientX - rect.left;
@@ -92,10 +102,12 @@ export default class Drago {
  @autobind
  _stopDrag(e) {
    if (!this._startPos) { return; }
+   const clientX = e.clientX ? e.clientX : e.changedTouches[0].clientX;
+   const clientY = e.clientY ? e.clientY : e.changedTouches[0].clientY;
 
    const time = (this._draggedTime - this._startTime) / 15;
-   const xDistance = e.clientX - this._startPos.x;
-   const yDistance = e.clientY - this._startPos.y;
+   const xDistance = clientX - this._startPos.x;
+   const yDistance = clientY - this._startPos.y;
 
    this._velocity.x = xDistance / time;
    this._velocity.y = yDistance / time;
@@ -108,35 +120,60 @@ export default class Drago {
    this._isMoving = false;
  }
 
+@autobind
+bound(coord, boundMax, boundMin) {
+  let value = coord;
+  if(coord >= boundMax) {
+   value = boundMax;
+  } else if (coord <= boundMin) {
+   value = boundMin;
+  }
+
+  return value;
+ }
+
  @autobind
  checkBounds() {
-   const elementRect = this._el.getBoundingClientRect();
-   const containerRect = this._container.getBoundingClientRect();
-   const width = elementRect.width;
-   const height = elementRect.height;
-   const rightBound = containerRect.width - width;
-   const leftBound = containerRect.left;
-   const topBound = containerRect.top;
-   const bottomBound = containerRect.height - height;
+   const width = this._el_rect.width;
+   const height = this._el_rect.height;
+   let test;
 
-   if (this._loc.x >= rightBound) {
-     this._velocity.x = 0;
-     this._loc.x = rightBound;
-   } else if( this._loc.x <= leftBound ) {
-     this._velocity.x = 0;
-     this._loc.x = leftBound;
-   } else if ( this._velocity.x < 0.1 && this._velocity.x > -0.1) {
-     this._velocity.x = 0;
+   if (this._opts.axis.x && this._opts.bounds.x) {
+     if (this._opts.restrict === 'contain') {
+       const rightBound = this._container_rect.width - width;
+       const leftBound = this._container_rect.left;
+
+       test = this.bound(this._loc.x, rightBound, leftBound);
+     } else if (this._opts.restrict.x === 'opposite') {
+       const left = this._container_rect.left - (width * .75);
+       const right = this._container_rect.width - (width * .25);
+
+       test = this.bound(this._loc.x, right, left);
+     }
+
+     if ( test !== this._loc.x ) {
+       this._velocity.x = 0;
+       this._loc.x = test;
+     }
    }
 
-   if (this._loc.y <= topBound) {
-     this._velocity.y = 0;
-     this._loc.y = topBound;
-   } else if (this._loc.y >= bottomBound) {
-     this._velocity.y = 0;
-     this._loc.y = bottomBound;
-   } else if( this._velocity.y < 0.1 && this._velocity.y > -0.1) {
-     this._velocity.y = 0;
+   if (this._opts.axis.y && this._opts.bounds.y) {
+     if (this._opts.restrict === 'contain') {
+       const top = this._container_rect.top;
+       const bottom = this._container_rect.height - height;
+
+       test = this.bound(this._loc.y, bottom, top);
+     } else if (this._opts.restrict === 'opposite') {
+       const top = this._container_rect.top - (height * .75);
+       const bottom = this._container_rect.height - (height * .25);
+
+       test = this.bound(this._loc.y, bottom, top);
+     }
+
+     if ( test !== this._loc.y ) {
+       this._velocity.y = 0;
+       this._loc.y = test;
+     }
    }
  }
 
@@ -147,6 +184,9 @@ export default class Drago {
      this._velocity.y = clamp(this._opts.vMin.y, this._opts.vMax.y, (this._velocity.y + this._opts.accel.y) * this._opts.drag.y);
      if (this._opts.axis.x) this._loc.x += this._velocity.x;
      if (this._opts.axis.y) this._loc.y += this._velocity.y;
+     if (this._velocity.y < 0.1 && this._velocity.y > -0.1) this._velocity.y = 0;
+     if (this._velocity.x < 0.1 && this._velocity.x > -0.1) this._velocity.x = 0;
+     this.checkBounds();
    }
 
    this._el.style.transform = `translate(${this._loc.x}px, ${this._loc.y}px)`;
@@ -156,15 +196,17 @@ export default class Drago {
      this._draggedTime = timestamp;
    }
 
-   this.checkBounds();
    this._animation_id = window.requestAnimationFrame(this._loop);
  }
 
  kill() {
    this._el.removeEventListener('mousedown', this._startDrag);
    this._el.removeEventListener('mouseup', this._stopDrag);
+   this._el.removeEventListener('touchstart', this._startDrag);
+   this._el.removeEventListener('touchend', this._stopDrag);
    this._container.removeEventListener('mouseout', this._killDrag);
    this._container.removeEventListener('mousemove', this._handleDrag);
+   this._container.removeEventListener('touchmove', this._handleDrag);
 
    window.cancelAnimationFrame(this._animation_id);
  }
